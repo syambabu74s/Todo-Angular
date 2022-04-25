@@ -1,0 +1,235 @@
+<!-- Responsive navbar-->
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+   <div class="container">
+      <a class="navbar-brand" href="#!">Todo Application</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+         </ul>
+      </div>
+   </div>
+</nav>
+<!-- Page header with logo and tagline-->
+<div class="jumbotron jumbotron-fluid">
+   <div class="container">
+      <h1 class="display-4">Angular 13 Todo Application</h1>
+      <p class="lead">A sample todo app built in Angular 13 and Lumen Back end API</p>
+   </div>
+</div>
+<div class="container">
+   <div class="row justify-content-md-center" *ngIf="!accessToken">
+      <div class="col-8 align-self-center">
+         Please Register if you don't have an account / Use Login 
+      </div>
+      <div class="col-2">
+         <button class="btn btn-sm btn-success btn-block" (click)="open(register)">Register</button>
+      </div>
+      <div class="col-2">
+         <button class="btn btn-sm btn-primary btn-block" (click)="open(content)">Login</button>
+      </div>
+   </div>
+   <div class="row justify-content-md-center" *ngIf="accessToken">
+      <div class="col-10 align-self-center">
+         Welcome User
+         : <b>{{userInfo?.name}} [{{userInfo?.email}}]</b>
+      </div>
+      <div class="col-2">
+         <button class="btn btn-sm btn-danger btn-block" (click)="logout()">Logout</button>
+      </div>
+   </div>
+   <hr>
+   <form [formGroup]="todoForm"  (ngSubmit)="createTodo()" *ngIf="accessToken">
+   <div class="row justify-content-md-center" *ngIf="accessToken">
+      <h3 class="display-8">Create New Todo</h3>
+      <div class="col-4 align-self-center">
+         <input type="text" id="title" name="title" formControlName="title" class="form-control" required placeholder="Title">
+      </div>
+      <div class="col-6">
+         <input type="text" id="description" name="description" formControlName="description" class="form-control" required placeholder="Description">
+      </div>
+      <div class="col-2">
+         <button type="submit" class="btn btn-sm btn-primary btn-block">Create</button>
+      </div>
+   </div>
+   <hr>
+   </form>
+   <div class="row" *ngIf="accessToken">
+      <h3 class="display-8">Created Todo Lists</h3>
+      <div class="list-group">
+         <span class="list-group-item list-group-item-action" *ngFor="let todo of todoList">
+            <div class="row" *ngIf="accessToken">
+               <div class="col-3 align-self-center">
+                  <h4 class="mb-1" [ngClass]="todo.completion_time ? 'strike':''">{{todo.title}}</h4>
+               </div>
+               <div class="col-6">
+                  <h6 class="mb-1" [ngClass]="todo.completion_time ? 'strike':''">{{todo.description}}</h6>
+               </div>
+               <div class="col-2">
+                  <button class="btn btn-sm" [ngClass]="todo.completion_time ? 'btn-danger':'btn-success'" (click)="onTaskStatusUpdation(todo.id,todo.completion_time ? 'INCOMPLETE':'COMPLETE')" >{{todo.completion_time ? 'Mark As Incompleted':'Mark As Completed'}}</button>
+               </div>
+               <div class="col-1">
+                  <button class="btn btn-sm btn-danger" (click)="deleteTaskItem(todo.id)">Delete</button>
+               </div>
+            </div>
+         </span>
+      </div>
+   </div>
+</div>
+<div class="container" id="about">
+   <div class="row justify-content-center">
+      <div class="col-md-6 text-center mt-5">
+         <h2 class="heading-section">About The Project</h2>
+      </div>
+   </div>
+   <div class="row justify-content-md-center">
+      <div class="card p-3 col-12 col-md-6 col-lg-4">
+         <div class="card-img pb-3">
+            <span class="mbr-iconfont mbri-users" style="color: rgb(0, 0, 0);" media-simple="true"></span>
+         </div>
+         <div class="card-box">
+            <h4 class="card-title py-3 mbr-fonts-style display-5">
+               Front-End (Angular)
+            </h4>
+            <p class="mbr-text mbr-fonts-style display-7">
+               Application developed with latest version of Angular (13) with Bootstrap.
+            </p>
+         </div>
+      </div>
+      <div class="card p-3 col-12 col-md-6 col-lg-4">
+         <div class="card-img pb-3">
+            <span class="mbr-iconfont mbri-globe" style="color: rgb(0, 0, 0);" media-simple="true"></span>
+         </div>
+         <div class="card-box">
+            <h4 class="card-title py-3 mbr-fonts-style display-5">
+               Back-End (PHP) Lumen REST API
+            </h4>
+            <p class="mbr-text mbr-fonts-style display-7">
+               Lumen is a PHP micro-framework built to deliver microservices and blazing fast APIs.
+            </p>
+         </div>
+      </div>
+      <div class="card p-3 col-12 col-md-6 col-lg-4">
+         <div class="card-img pb-3">
+            <span class="mbr-iconfont mbri-smile-face" style="color: rgb(0, 0, 0);" media-simple="true"></span>
+         </div>
+         <div class="card-box">
+            <h4 class="card-title py-3 mbr-fonts-style display-5">
+               Database - MySQL
+            </h4>
+            <p class="mbr-text mbr-fonts-style display-7">
+               MySQL is an open-source relational database management system to store the data.
+            </p>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="container" id="contact">
+   <div class="row justify-content-center">
+      <div class="col-md-6 text-center mt-5">
+         <h2 class="heading-section">Contact Me</h2>
+      </div>
+   </div>
+   <div class="row justify-content-center">
+      <div class="col-md-10">
+         <div class="wrapper">
+            <div class="row no-gutters">
+               <div class="col-md-12 d-flex align-items-stretch">
+                  <div class="info-wrap w-100 p-lg-5 p-4 img">
+                     <h3>Contact us</h3>
+                     <p class="mb-4">I'm open for any suggestion or just to have a chat</p>
+                     <div class="dbox w-100 d-flex align-items-start">
+                        <div class="icon d-flex align-items-center justify-content-center">
+                           <span class="fa fa-map-marker"></span>
+                        </div>
+                        <div class="text pl-3">
+                           <p><span>Address:</span> 256 Shady Glen Crescent ,Kitchener Ontario, ON N2R 0J9,Canada</p>
+                        </div>
+                     </div>
+                     <div class="dbox w-100 d-flex align-items-center">
+                        <div class="icon d-flex align-items-center justify-content-center">
+                           <span class="fa fa-phone"></span>
+                        </div>
+                        <div class="text pl-3">
+                           <p><span>Phone:</span> <a href="tel://+12269789291">+1 226 978 9291</a></p>
+                        </div>
+                     </div>
+                     <div class="dbox w-100 d-flex align-items-center">
+                        <div class="icon d-flex align-items-center justify-content-center">
+                           <span class="fa fa-paper-plane"></span>
+                        </div>
+                        <div class="text pl-3">
+                           <p><span>Email:</span> <a href="mailto:syamtvm26@gmail.com">syamtvm26@gmail.com</a></p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+   <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2022</p>
+   </div>
+</footer>
+<ng-template #content let-modal>
+   <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">User Login</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+   </div>
+   <form class="text-center border border-light p-5" [formGroup]="formGroup"  (ngSubmit)="userLogin()">
+   <div class="modal-body">
+      <!-- Default form login -->
+      <p class="h4 mb-4">Sign in</p>
+      <!-- Email -->
+      <input type="email" id="txtusername" name="email" formControlName="email" class="form-control mb-4" required placeholder="E-mail">
+      <!-- Password -->
+      <input type="password" id="txtpassword" name="password" formControlName="password" class="form-control mb-4" required placeholder="Password">
+      <div class="d-flex justify-content-around">
+         <div>
+            <!-- Remember me -->
+         </div>
+      </div>
+      <!-- Sign in button -->
+      <!-- Register -->
+      <!-- Default form login --> 
+   </div>
+   <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark">Login</button>
+   </div>
+   </form>
+</ng-template>
+<ng-template #register let-modal>
+   <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">User Register</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+   </div>
+   <form class="text-center border border-light p-5" [formGroup]="registerForm"  (ngSubmit)="userRegister()">
+   <div class="modal-body">
+      <!-- Default form login -->
+      <p class="h4 mb-4">Register </p>
+      <!-- Email -->
+      <input type="text" id="txtname" name="name" formControlName="name" class="form-control mb-4" required placeholder="Name">
+      <input type="email" id="txtusername" name="email" formControlName="email" class="form-control mb-4" required placeholder="E-mail">
+      <!-- Password -->
+      <input type="password" id="txtpassword" name="password" formControlName="password" class="form-control mb-4" required placeholder="Password">
+      <div class="d-flex justify-content-around">
+         <div>
+            <!-- Remember me -->
+         </div>
+      </div>
+      <!-- Sign in button -->
+      <!-- Register -->
+      <!-- Default form login --> 
+   </div>
+   <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark">Register</button>
+   </div>
+   </form>
+</ng-template>
